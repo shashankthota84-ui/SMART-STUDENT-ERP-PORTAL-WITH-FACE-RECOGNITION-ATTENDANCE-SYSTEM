@@ -1,10 +1,11 @@
 // src/pages/Dashboard.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getLoggedInUser, getStudentAttendanceHistory } from '../utils/storageUtils';
+import { getLoggedInUser, getStudentAttendanceHistory, getDailySchedule } from '../utils/storageUtils';
 
 const Dashboard = () => {
   const user = getLoggedInUser();
+  const schedule = getDailySchedule();
   const history = getStudentAttendanceHistory(user.rollNumber);
   
   const totalDays = history.length;
@@ -67,6 +68,22 @@ const Dashboard = () => {
             </span>
           </div>
         </div>
+      </div>
+
+      <div className="page-header mt-6">
+        <h2 className="text-xl">Today's Schedule</h2>
+      </div>
+
+      <div className="dashboard-grid mb-6">
+        {schedule.map(cls => (
+          <div key={cls.id} className="glass-card flex items-center justify-between" style={{padding: '1rem'}}>
+            <div>
+              <h3 className="font-semibold text-lg">{cls.name}</h3>
+              <p className="text-muted text-sm">{cls.time}</p>
+            </div>
+            <Link to="/attendance" className="btn btn-primary" style={{padding: '0.4rem 0.8rem', fontSize: '0.9rem'}}>Mark</Link>
+          </div>
+        ))}
       </div>
 
       <div className="page-header mt-6">

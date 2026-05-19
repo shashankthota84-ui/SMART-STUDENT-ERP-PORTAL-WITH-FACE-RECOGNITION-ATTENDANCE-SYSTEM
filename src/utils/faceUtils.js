@@ -55,9 +55,12 @@ export const detectFaceDescriptor = async (videoElement) => {
 export const matchFace = (liveDescriptorArray, savedDescriptorArray, threshold = 0.6) => {
     if(!liveDescriptorArray || !savedDescriptorArray) return false;
 
+    const liveArr = Array.isArray(liveDescriptorArray) || liveDescriptorArray instanceof Float32Array ? liveDescriptorArray : Object.values(liveDescriptorArray);
+    const savedArr = Array.isArray(savedDescriptorArray) || savedDescriptorArray instanceof Float32Array ? savedDescriptorArray : Object.values(savedDescriptorArray);
+
     // Convert regular arrays back to Float32Array for face-api computation
-    const liveDesc = new Float32Array(liveDescriptorArray);
-    const savedDesc = new Float32Array(savedDescriptorArray);
+    const liveDesc = new Float32Array(liveArr);
+    const savedDesc = new Float32Array(savedArr);
 
     // Calculate Euclidean distance between the two descriptors
     const distance = faceapi.euclideanDistance(liveDesc, savedDesc);

@@ -16,6 +16,20 @@ const getData = (key) => {
   return data ? JSON.parse(data) : null;
 };
 
+// --- Schedule ---
+
+const DAILY_SCHEDULE = [
+  { id: 'cs101', name: 'Data Structures', time: '09:00 AM - 10:30 AM' },
+  { id: 'cs102', name: 'Operating Systems', time: '11:00 AM - 12:30 PM' },
+  { id: 'cs103', name: 'Web Development', time: '01:30 PM - 03:00 PM' },
+  { id: 'cs104', name: 'Database Management', time: '03:30 PM - 05:00 PM' }
+];
+
+export const getDailySchedule = () => {
+  return DAILY_SCHEDULE;
+};
+
+
 // --- Students ---
 
 export const getStudents = () => {
@@ -95,22 +109,27 @@ export const getAttendanceRecords = () => {
   return getData(ATTENDANCE_KEY) || [];
 };
 
-export const markAttendance = (student) => {
+export const markAttendance = (student, className) => {
+  if (!className) {
+    throw new Error('Please select a class to mark attendance.');
+  }
+
   const records = getAttendanceRecords();
   const today = new Date().toLocaleDateString();
   
-  // Check if already marked today
+  // Check if already marked for this class today
   const alreadyMarked = records.some(
-    (r) => r.rollNumber === student.rollNumber && r.date === today
+    (r) => r.rollNumber === student.rollNumber && r.date === today && r.className === className
   );
 
   if (alreadyMarked) {
-    throw new Error('Attendance already marked today');
+    throw new Error(`Attendance already marked for ${className} today`);
   }
 
   const newRecord = {
     rollNumber: student.rollNumber,
     name: student.fullName,
+    className: className,
     date: today,
     time: new Date().toLocaleTimeString(),
     status: 'Present'
@@ -124,6 +143,7 @@ export const markAttendance = (student) => {
 export const processAbsences = () => {
   const students = getStudents();
   const records = getAttendanceRecords();
+  const schedule = getDailySchedule();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -138,19 +158,26 @@ export const processAbsences = () => {
     for (let d = new Date(registrationDate); d < today; d.setDate(d.getDate() + 1)) {
       const dateStr = d.toLocaleDateString();
       
-      // Check if there is any record (Present or Absent) for this student on this date
-      const hasRecord = records.some(r => r.rollNumber === student.rollNumber && r.date === dateStr);
-      
-      if (!hasRecord) {
-        records.push({
-          rollNumber: student.rollNumber,
-          name: student.fullName,
-          date: dateStr,
-          time: '--',
-          status: 'Absent'
-        });
-        updated = true;
-      }
+      // For each day, loop through each class in the schedule
+      schedule.forEach(cls => {
+        const hasRecord = records.some(r => 
+          r.rollNumber === student.rollNumber && 
+          r.date === dateStr && 
+          r.className === cls.name
+        );
+        
+        if (!hasRecord) {
+          records.push({
+            rollNumber: student.rollNumber,
+            name: student.fullName,
+            className: cls.name,
+            date: dateStr,
+            time: '--',
+            status: 'Absent'
+          });
+          updated = true;
+        }
+      });
     }
   });
 

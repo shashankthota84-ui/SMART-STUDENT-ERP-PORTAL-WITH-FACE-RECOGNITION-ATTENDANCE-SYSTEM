@@ -15,6 +15,19 @@ const AdminDashboard = () => {
     setRefreshTrigger(prev => prev + 1);
   }, []);
 
+  const handleNotify = (record) => {
+    // Find student email
+    const student = students.find(s => s.rollNumber === record.rollNumber);
+    const email = student ? student.email : 'student@example.com';
+    
+    // Create mailto link
+    const subject = `Attendance Alert: Absent for ${record.className || 'Class'}`;
+    const body = `Dear ${record.name},%0D%0A%0D%0AYou were marked absent for ${record.className || 'your class'} on ${record.date}.%0D%0APlease ensure you attend the classes regularly.%0D%0A%0D%0ARegards,%0D%0AAdmin`;
+    
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    alert(`Notification email sent to ${email} for missing ${record.className || 'class'}!`);
+  };
+
   // Reverse so newest are first
   const sortedAttendance = [...attendance].reverse();
 
@@ -113,10 +126,12 @@ const AdminDashboard = () => {
               <thead>
                 <tr>
                   <th>Date</th>
+                  <th>Class</th>
                   <th>Time</th>
                   <th>Roll No</th>
                   <th>Name</th>
                   <th>Status</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -124,6 +139,7 @@ const AdminDashboard = () => {
                   filteredAttendance.map((record, index) => (
                     <tr key={index}>
                       <td>{record.date}</td>
+                      <td>{record.className || '--'}</td>
                       <td>{record.time}</td>
                       <td><strong>{record.rollNumber}</strong></td>
                       <td>{record.name}</td>
@@ -132,11 +148,22 @@ const AdminDashboard = () => {
                           {record.status}
                         </span>
                       </td>
+                      <td>
+                        {record.status === 'Absent' && (
+                          <button 
+                            className="btn btn-outline" 
+                            style={{padding: '0.2rem 0.5rem', fontSize: '0.8rem', color: 'var(--primary)', borderColor: 'var(--primary)'}}
+                            onClick={() => handleNotify(record)}
+                          >
+                            Notify
+                          </button>
+                        )}
+                      </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5" className="text-center text-muted" style={{padding: '2rem'}}>
+                    <td colSpan="7" className="text-center text-muted" style={{padding: '2rem'}}>
                       No attendance records found.
                     </td>
                   </tr>
