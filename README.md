@@ -1,16 +1,29 @@
-# React + Vite
+# Face Recognition Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
+This project is a Face Recognition web application built using React, HTML, CSS, and JavaScript. The main goal of the project is to detect and recognize faces using the browser webcam and provide a simple, secure, and user-friendly authentication experience.
 
-Currently, two official plugins are available:
+## Features
+- Face detection using webcam
+- Face recognition / verification flow
+- React-based user interface
+- Responsive design using HTML and CSS
+- Secure user verification concept
+- Easy navigation between pages
+- Clean and beginner-friendly project structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tech Stack
+- React
+- HTML
+- CSS
+- JavaScript
+- Face recognition library if used, such as face-api.js
+- Browser webcam API
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## How to Run
+1. Clone the repository
+2. Install dependencies using npm install
+3. Start the project using npm run dev or npm start
+4. Open the local host URL in the browser
+5. Allow webcam permission
+6. Use the face recognition feature
