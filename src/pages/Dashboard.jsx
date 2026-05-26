@@ -1,34 +1,54 @@
-// src/pages/Dashboard.jsx
+/**
+ * @file Dashboard.jsx
+ * @description Main dashboard component for the student portal. 
+ * Displays student profile summary, attendance statistics, daily schedule, and quick links to other modules.
+ */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getLoggedInUser, getStudentAttendanceHistory, getDailySchedule } from '../utils/storageUtils';
 
+/**
+ * Dashboard Component
+ * @returns {JSX.Element} The rendered dashboard view
+ */
 const Dashboard = () => {
+  // Fetch current user and their specific data from local storage
   const user = getLoggedInUser();
   const schedule = getDailySchedule();
   const history = getStudentAttendanceHistory(user.rollNumber);
   
+  // Calculate attendance statistics
   const totalDays = history.length;
   const presentDays = history.filter(r => r.status === 'Present').length;
   const absentDays = totalDays - presentDays;
+  
+  // Calculate percentage, guarding against division by zero
   const attendancePercentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
   
+  // Get the most recent attendance record status and date
   const latestStatus = history.length > 0 ? history[history.length - 1].status : 'No data';
   const latestDate = history.length > 0 ? history[history.length - 1].date : 'N/A';
 
+  /**
+   * Helper function to extract initials from a full name (e.g. "John Doe" -> "JD")
+   * @param {string} name - Full name
+   * @returns {string} Two-letter initials
+   */
   const getInitials = (name) => {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
   };
 
   return (
     <div>
+      {/* Page Header section */}
       <div className="page-header">
         <h1 className="page-title gradient-text">Welcome, {user.fullName}</h1>
         <p className="page-subtitle">Smart Student ERP Dashboard</p>
       </div>
 
       <div className="dashboard-grid">
-        {/* Profile Summary Card */}
+        {/* Profile Summary Card: Spans across all columns */}
         <div className="glass-card flex items-start" style={{gridColumn: '1 / -1'}}>
           <div className="profile-avatar mr-6">
             {getInitials(user.fullName)}
@@ -44,7 +64,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
+        {/* Statistics Cards */}
         <div className="glass-card stat-card">
           <div className="stat-label">Attendance %</div>
           <div className="stat-value gradient-text">{attendancePercentage}%</div>
@@ -63,6 +83,7 @@ const Dashboard = () => {
         <div className="glass-card stat-card">
           <div className="stat-label">Latest Activity ({latestDate})</div>
           <div className="mt-2">
+            {/* Dynamically style the badge based on presence status */}
             <span className={`status-badge ${latestStatus === 'Present' ? 'status-present' : 'status-absent'}`}>
               {latestStatus}
             </span>
@@ -70,11 +91,13 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Schedule Section */}
       <div className="page-header mt-6">
         <h2 className="text-xl">Today's Schedule</h2>
       </div>
 
       <div className="dashboard-grid mb-6">
+        {/* Render each scheduled class as a separate card */}
         {schedule.map(cls => (
           <div key={cls.id} className="glass-card flex items-center justify-between" style={{padding: '1rem'}}>
             <div>
@@ -86,11 +109,13 @@ const Dashboard = () => {
         ))}
       </div>
 
+      {/* Quick Actions Navigation Section */}
       <div className="page-header mt-6">
         <h2 className="text-xl">Quick Actions</h2>
       </div>
 
       <div className="dashboard-grid">
+         {/* Links to various modules in the ERP */}
          <Link to="/attendance" className="glass-card text-center" style={{textDecoration: 'none'}}>
             <h3 className="text-lg gradient-text mb-2">Mark Attendance</h3>
             <p className="text-muted text-sm">Use face recognition to mark today's attendance.</p>

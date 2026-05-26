@@ -1,8 +1,17 @@
-// src/pages/Exams.jsx
+/**
+ * @file Exams.jsx
+ * @description Page component that displays the student's exam schedule.
+ * Includes a section for the currently ongoing exam and a table for upcoming exams.
+ */
+
 import React from 'react';
 
+/**
+ * Exams Component
+ * @returns {JSX.Element} The exam schedule view
+ */
 const Exams = () => {
-
+  // Dummy data representing an exam happening right now
   const ongoingExam = {
     subject: "Database Management Systems",
     code: "CS301",
@@ -12,6 +21,7 @@ const Exams = () => {
     status: "In Progress"
   };
 
+  // Dummy data array for future scheduled exams
   const upcomingExams = [
     { code: "CS302", subject: "Operating Systems", date: "15/05/2026", time: "10:00 AM - 01:00 PM" },
     { code: "CS303", subject: "Computer Networks", date: "18/05/2026", time: "10:00 AM - 01:00 PM" },
@@ -26,9 +36,11 @@ const Exams = () => {
         <p className="page-subtitle">View your ongoing and upcoming examinations</p>
       </div>
 
+      {/* Ongoing Exam Highlight Card */}
       <div className="glass-card mb-6" style={{ border: '1px solid var(--primary)' }}>
         <div className="flex justify-between items-center mb-4" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
           <h2 className="text-xl text-primary" style={{color: 'var(--primary)'}}>Ongoing Exam Today</h2>
+          {/* Pulsing badge to grab attention for live exams */}
           <span className="status-badge status-present animate-pulse" style={{ animation: 'pulse 2s infinite' }}>{ongoingExam.status}</span>
         </div>
         <div className="grid" style={{gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem'}}>
@@ -47,6 +59,7 @@ const Exams = () => {
         </div>
       </div>
 
+      {/* Upcoming Exams Table Section */}
       <div className="glass-card">
         <div className="mb-4">
           <h2 className="text-xl">Upcoming Exams Schedule</h2>
@@ -63,6 +76,7 @@ const Exams = () => {
               </tr>
             </thead>
             <tbody>
+              {/* Render rows for each upcoming exam */}
               {upcomingExams.map((exam, index) => (
                 <tr key={index}>
                   <td>{exam.date}</td>

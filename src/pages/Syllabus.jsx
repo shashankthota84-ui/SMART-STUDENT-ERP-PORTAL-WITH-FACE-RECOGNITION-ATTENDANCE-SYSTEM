@@ -1,9 +1,20 @@
-// src/pages/Syllabus.jsx
+/**
+ * @file Syllabus.jsx
+ * @description Displays the curriculum for various subjects.
+ * Uses an accordion-style UI to expand/collapse topics and provides links to external study materials.
+ */
+
 import React, { useState } from 'react';
 
+/**
+ * Syllabus Component
+ * @returns {JSX.Element} The interactive syllabus page
+ */
 const Syllabus = () => {
+  // State to track which subject's accordion is currently expanded (null if all closed)
   const [expandedSubject, setExpandedSubject] = useState(null);
 
+  // Hardcoded syllabus data containing subjects, topics, and resource links
   const subjects = [
     {
       id: 1,
@@ -210,6 +221,12 @@ const Syllabus = () => {
     }
   ];
 
+  /**
+   * Toggles the accordion state for a specific subject.
+   * If the clicked subject is already open, it closes it (sets state to null).
+   * Otherwise, it opens the clicked subject.
+   * @param {number} id - The unique ID of the subject
+   */
   const toggleSubject = (id) => {
     setExpandedSubject(expandedSubject === id ? null : id);
   };
@@ -222,8 +239,10 @@ const Syllabus = () => {
       </div>
 
       <div className="syllabus-list mt-6">
+        {/* Render an accordion item for each subject */}
         {subjects.map((subject) => (
           <div key={subject.id} className="glass-card" style={{ padding: '0', overflow: 'hidden', marginBottom: '1rem' }}>
+            {/* Accordion Header (Clickable to toggle) */}
             <div 
               className={`syllabus-subject-header ${expandedSubject === subject.id ? 'active' : ''}`}
               onClick={() => toggleSubject(subject.id)}
@@ -232,18 +251,22 @@ const Syllabus = () => {
                 <span className="text-sm font-bold" style={{ color: 'var(--primary)', marginRight: '0.75rem' }}>{subject.code}</span>
                 <span className="text-lg font-medium">{subject.name}</span>
               </div>
+              {/* Dropdown Indicator Icon (rotates when expanded) */}
               <div style={{ transform: expandedSubject === subject.id ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}>
                 ▼
               </div>
             </div>
 
+            {/* Accordion Body (Only renders if this subject is the currently expanded one) */}
             {expandedSubject === subject.id && (
               <div className="subject-content" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                 <div className="topic-grid">
+                  {/* Map through and render individual topics within the subject */}
                   {subject.topics.map((topic, idx) => (
                     <div key={idx} className="topic-card">
                       <div className="topic-header">
                         <h3 className="topic-title">{topic.title}</h3>
+                        {/* External link to study material */}
                         <a 
                           href={topic.material} 
                           target="_blank" 

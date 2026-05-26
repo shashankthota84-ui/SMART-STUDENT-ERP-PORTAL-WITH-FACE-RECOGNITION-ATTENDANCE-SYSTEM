@@ -1,4 +1,9 @@
-// src/App.jsx
+/**
+ * @file App.jsx
+ * @description Main application component that defines the routing structure and global layout.
+ * It manages protected routes, public routes, and conditionally renders the navigation bar.
+ */
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -21,16 +26,29 @@ import Syllabus from './pages/Syllabus';
 
 import './App.css';
 
-// Layout wrapper to conditionally show navbar
+/**
+ * AppLayout Component
+ * @description Wrapper component that conditionally displays the Navbar based on the current route.
+ * @param {Object} props - React props
+ * @param {React.ReactNode} props.children - The child components to render inside the layout
+ * @returns {JSX.Element} The layout structure
+ */
 const AppLayout = ({ children }) => {
+  // Hook to get the current location/path
   const location = useLocation();
-  // Don't show navbar on these routes
+  
+  // List of routes where the navigation bar should NOT be displayed
   const hideNavbarRoutes = ['/login', '/register', '/face-verification', '/'];
+  
+  // Boolean to determine if navbar should be shown based on current path
   const shouldShowNavbar = !hideNavbarRoutes.includes(location.pathname);
 
   return (
     <div className="app-container">
+      {/* Conditionally render the Navbar */}
       {shouldShowNavbar && <Navbar />}
+      
+      {/* Main content area where routed pages will be injected */}
       <main className="main-content">
         {children}
       </main>
@@ -38,8 +56,15 @@ const AppLayout = ({ children }) => {
   );
 };
 
+/**
+ * App Component
+ * @description The root component that sets up the React Router and defines all application routes.
+ * @returns {JSX.Element} The complete application router configuration
+ */
 const App = () => {
+  // Effect hook that runs once on component mount to process any pending absences
   React.useEffect(() => {
+    // Process absences from local storage or backend
     processAbsences();
   }, []);
 
@@ -48,11 +73,12 @@ const App = () => {
       <AppLayout>
         <Routes>
           {/* Public Routes */}
+          {/* Redirect root path to login by default */}
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          {/* Semi-Protected: Requires Login, but NOT Face Verification */}
+          {/* Semi-Protected Route: Requires Login, but NOT Face Verification yet */}
           <Route 
             path="/face-verification" 
             element={
@@ -62,7 +88,7 @@ const App = () => {
             } 
           />
 
-          {/* Fully Protected Routes: Requires Login AND Face Verification */}
+          {/* Fully Protected Routes: Requires Login AND successful Face Verification */}
           <Route 
             path="/dashboard" 
             element={
@@ -127,6 +153,8 @@ const App = () => {
               </ProtectedRoute>
             } 
           />
+          
+          {/* Admin specific route */}
           <Route 
             path="/admin" 
             element={
@@ -136,7 +164,7 @@ const App = () => {
             } 
           />
 
-          {/* Fallback */}
+          {/* Fallback Route: Any undefined path redirects to login */}
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </AppLayout>

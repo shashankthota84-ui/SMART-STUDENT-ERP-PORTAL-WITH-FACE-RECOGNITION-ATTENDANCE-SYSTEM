@@ -1,9 +1,21 @@
-// src/pages/Profile.jsx
+/**
+ * @file Profile.jsx
+ * @description User profile page where students can view their details and update
+ * specific non-critical information like phone number and branch/year.
+ */
+
 import React, { useState } from 'react';
 import { getLoggedInUser, updateStudent } from '../utils/storageUtils';
 
+/**
+ * Profile Component
+ * @returns {JSX.Element} The profile view and edit form
+ */
 const Profile = () => {
+  // Fetch current user from local storage
   const user = getLoggedInUser();
+  
+  // Initialize form state with existing user data
   const [formData, setFormData] = useState({
     fullName: user.fullName,
     branch: user.branch || '',
@@ -11,16 +23,26 @@ const Profile = () => {
     phone: user.phone || ''
   });
   
+  // State for showing success/error alerts upon save
   const [status, setStatus] = useState({ type: '', message: '' });
 
+  /**
+   * Event handler for updating form state dynamically as the user types
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event from an input field
+   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  /**
+   * Event handler for saving updated profile details
+   * @param {React.FormEvent} e - The form submission event
+   */
   const handleSave = (e) => {
     e.preventDefault();
     try {
+      // Call utility to persist changes to LocalStorage
       updateStudent(user.rollNumber, formData);
       setStatus({ type: 'success', message: 'Profile updated successfully!' });
     } catch (error) {
@@ -28,6 +50,7 @@ const Profile = () => {
     }
   };
 
+  // Format the user's account creation date for display
   const createdDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A';
 
   return (
@@ -37,7 +60,9 @@ const Profile = () => {
         <p className="page-subtitle">Manage your account details</p>
       </div>
 
+      {/* Header Card: Profile Avatar and Status */}
       <div className="glass-card mb-6 flex items-center" style={{display: 'flex', alignItems: 'center', gap: '2rem'}}>
+        {/* Generate dynamic avatar using initials */}
         <div className="profile-avatar" style={{margin: 0, width: '100px', height: '100px', fontSize: '2.5rem'}}>
           {user.fullName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2)}
         </div>
@@ -51,9 +76,11 @@ const Profile = () => {
         </div>
       </div>
 
+      {/* Profile Editing Form */}
       <div className="glass-card">
         <h3 className="text-xl mb-4">Edit Details</h3>
         
+        {/* Alert message display */}
         {status.message && (
           <div className={`alert alert-${status.type}`}>
             {status.message}
@@ -62,6 +89,8 @@ const Profile = () => {
 
         <form onSubmit={handleSave}>
           <div className="auth-grid">
+            
+            {/* Editable Fields */}
             <div className="form-group">
               <label className="form-label">Full Name</label>
               <input 
@@ -74,6 +103,7 @@ const Profile = () => {
               />
             </div>
 
+            {/* Non-editable Fields (Disabled) */}
             <div className="form-group">
               <label className="form-label">Roll Number (Cannot be changed)</label>
               <input 

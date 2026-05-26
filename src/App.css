@@ -1,6 +1,13 @@
-/* src/App.css */
-/* Removed default vite styles, relying on index.css for global styles */
+/* 
+ * @file App.css
+ * @description Component-specific styles for the application layout.
+ * Includes styles for the navigation bar, dashboard grids, auth cards, and responsive rules.
+ */
 
+/* 
+ * Navigation Bar Styles
+ * Uses a glassmorphism effect (blur + translucent background)
+ */
 .navbar {
   width: 250px;
   background: var(--glass-bg);
@@ -9,12 +16,13 @@
   border-right: 1px solid var(--glass-border);
   padding: 2rem 1rem;
   display: flex;
-  flex-direction: column;
-  height: 100vh;
-  position: sticky;
+  flex-direction: column; /* Stack links vertically */
+  height: 100vh; /* Full viewport height */
+  position: sticky; /* Keep navbar visible while scrolling */
   top: 0;
 }
 
+/* Application Brand/Logo */
 .nav-brand {
   font-size: 1.5rem;
   font-weight: 700;
@@ -23,13 +31,15 @@
   text-align: center;
 }
 
+/* Container for all navigation links */
 .nav-links {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;
+  gap: 0.5rem; /* Space between links */
+  flex: 1; /* Push the logout button to the bottom */
 }
 
+/* Individual Navigation Link styling */
 .nav-item {
   display: flex;
   align-items: center;
@@ -39,22 +49,25 @@
   color: var(--text-muted);
   text-decoration: none;
   font-weight: 500;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease; /* Smooth hover transition */
 }
 
+/* Hover state for navigation links */
 .nav-item:hover {
   background: rgba(255, 255, 255, 0.05);
   color: var(--text-main);
 }
 
+/* Active state for the currently selected navigation link */
 .nav-item.active {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(236, 72, 153, 0.15));
   color: var(--primary);
   border-left: 3px solid var(--primary);
 }
 
+/* Special styling for the Logout button */
 .nav-logout {
-  margin-top: auto;
+  margin-top: auto; /* Pushes the button to the bottom of the flex container */
   cursor: pointer;
   color: var(--danger);
 }
@@ -63,14 +76,18 @@
   background: rgba(239, 68, 68, 0.1);
 }
 
-/* Dashboard Grid */
+/* =========================================
+ * Dashboard Grid System
+ * ========================================= */
 .dashboard-grid {
   display: grid;
+  /* Automatically create columns that fit, with a minimum width of 300px */
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
+/* Statistical summary card styling */
 .stat-card {
   display: flex;
   flex-direction: column;
@@ -89,10 +106,11 @@
   letter-spacing: 0.05em;
 }
 
+/* User profile picture/initials placeholder */
 .profile-avatar {
   width: 80px;
   height: 80px;
-  border-radius: 50%;
+  border-radius: 50%; /* Make it perfectly circular */
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   display: flex;
   align-items: center;
@@ -103,7 +121,9 @@
   margin-bottom: 1rem;
 }
 
-/* Auth Pages */
+/* =========================================
+ * Authentication Pages (Login/Register)
+ * ========================================= */
 .auth-container {
   display: flex;
   align-items: center;
@@ -112,24 +132,30 @@
   padding: 1rem;
 }
 
+/* Container card for login/registration forms */
 .auth-card {
   width: 100%;
   max-width: 450px;
   padding: 2.5rem;
 }
 
+/* Wider card for complex forms (e.g. registration details) */
 .auth-card.large {
   max-width: 900px;
 }
 
+/* 2-column grid for forms */
 .auth-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
 }
 
-/* Responsive Navbar */
+/* =========================================
+ * Responsive Design (Mobile)
+ * ========================================= */
 @media (max-width: 768px) {
+  /* Change sidebar into a top navigation bar on smaller screens */
   .navbar {
     width: 100%;
     height: auto;
@@ -139,6 +165,7 @@
     padding: 1rem;
   }
   
+  /* Arrange links horizontally instead of vertically */
   .nav-links {
     flex-direction: row;
     flex-wrap: wrap;
@@ -154,6 +181,7 @@
     margin-bottom: 1rem;
   }
   
+  /* Stack form fields in a single column on mobile */
   .auth-grid {
     grid-template-columns: 1fr;
   }

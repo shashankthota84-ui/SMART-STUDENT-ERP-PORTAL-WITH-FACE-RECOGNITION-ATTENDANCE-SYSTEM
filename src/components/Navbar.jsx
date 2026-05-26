@@ -1,24 +1,44 @@
-// src/components/Navbar.jsx
+/**
+ * @file Navbar.jsx
+ * @description Navigation bar component that provides links to different sections of the application.
+ * Highlights the active link and handles user logout.
+ */
+
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { logoutUser, getLoggedInUser } from '../utils/storageUtils';
 
+/**
+ * Navbar Component
+ * @returns {JSX.Element|null} Navigation UI or null if no user is logged in
+ */
 const Navbar = () => {
+  // Hook to navigate programmatically
   const navigate = useNavigate();
+  
+  // Retrieve the currently logged-in user from storage
   const user = getLoggedInUser();
 
+  /**
+   * Handles the logout process
+   * Clears user session and redirects to the login page
+   */
   const handleLogout = () => {
     logoutUser();
     navigate('/login');
   };
 
+  // Do not render the navbar if the user is not authenticated
   if (!user) return null;
 
   return (
     <nav className="navbar">
+      {/* Brand logo/name */}
       <div className="nav-brand gradient-text">Smart ERP</div>
       
+      {/* Navigation links container */}
       <div className="nav-links">
+        {/* NavLink automatically applies 'active' class when the route matches */}
         <NavLink 
           to="/dashboard" 
           className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
@@ -82,6 +102,7 @@ const Navbar = () => {
           Admin Demo
         </NavLink>
 
+        {/* Logout button */}
         <div className="nav-item nav-logout" onClick={handleLogout}>
           Logout
         </div>

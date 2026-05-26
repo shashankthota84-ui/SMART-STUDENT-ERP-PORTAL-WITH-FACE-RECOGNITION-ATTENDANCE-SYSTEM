@@ -1,12 +1,26 @@
-// src/pages/Register.jsx
+/**
+ * @file Register.jsx
+ * @description Student registration page. Includes a two-step process:
+ * 1. Collect personal and academic details.
+ * 2. Capture a facial descriptor for biometric authentication.
+ */
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import WebcamFaceBox from '../components/WebcamFaceBox';
 import { saveStudent } from '../utils/storageUtils';
 
+/**
+ * Register Component
+ * @returns {JSX.Element} The multi-step registration form
+ */
 const Register = () => {
   const navigate = useNavigate();
+  
+  // Tracks which step of registration the user is on (1: Details, 2: Face)
   const [step, setStep] = useState(1);
+  
+  // Form state for student details
   const [formData, setFormData] = useState({
     fullName: '',
     rollNumber: '',
@@ -17,29 +31,46 @@ const Register = () => {
     phone: ''
   });
   
+  // Error handling and loading state
   const [error, setError] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
 
+  /**
+   * Updates form data state based on user input.
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Input change event
+   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  /**
+   * Validates details and advances to step 2 (Face Registration).
+   * @param {React.FormEvent} e - Form submission event
+   */
   const handleDetailsSubmit = (e) => {
     e.preventDefault();
-    // Basic validation
+    
+    // Basic validation for required fields
     if (!formData.fullName || !formData.rollNumber || !formData.email || !formData.password) {
       setError('Please fill in all required fields');
       return;
     }
+    
+    // Clear errors and proceed to the next step
     setError('');
     setStep(2);
   };
 
+  /**
+   * Processes the captured face descriptor and finalizes registration.
+   * @param {Array|null} descriptor - Facial feature array from webcam
+   */
   const handleFaceRegistration = async (descriptor) => {
     setError('');
     setIsProcessing(true);
 
+    // Validate face capture
     if (!descriptor) {
       setError('No face detected. Please ensure your face is clearly visible.');
       setIsProcessing(false);
@@ -47,15 +78,17 @@ const Register = () => {
     }
 
     try {
-      // Save full student profile including face descriptor
+      // Save full student profile (details + biometrics) to local storage
       saveStudent({
         ...formData,
         faceDescriptor: descriptor
       });
       
       alert('Registration successful! Please login.');
+      // Redirect to login page after successful registration
       navigate('/login');
     } catch (err) {
+      // Handle storage errors (e.g., duplicate email/roll number)
       setError(err.message || 'Error during registration');
     } finally {
       setIsProcessing(false);
@@ -64,6 +97,7 @@ const Register = () => {
 
   return (
     <div className="auth-container">
+      {/* Dynamic class to adjust card width based on the current step */}
       <div className={`glass-panel auth-card ${step === 2 ? 'large' : ''}`}>
         <div className="text-center mb-6">
           <h1 className="page-title gradient-text">Student Registration</h1>
@@ -75,6 +109,7 @@ const Register = () => {
         {error && <div className="alert alert-error">{error}</div>}
 
         {step === 1 ? (
+          // --- STEP 1: Details Form ---
           <form onSubmit={handleDetailsSubmit}>
             <div className="auth-grid">
               <div className="form-group">
@@ -162,6 +197,7 @@ const Register = () => {
             </div>
           </form>
         ) : (
+          // --- STEP 2: Face Registration ---
           <div>
             <div className="mb-4 text-center">
               <p>Please position your face clearly in the camera frame.</p>
@@ -176,6 +212,7 @@ const Register = () => {
             />
 
             <div className="mt-6 text-center">
+              {/* Option to go back and edit details */}
               <button 
                 type="button" 
                 className="btn btn-outline" 

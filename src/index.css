@@ -1,45 +1,77 @@
-/* src/index.css */
+/* 
+ * @file index.css
+ * @description Global stylesheet for the application.
+ * Contains CSS variables (design tokens), global resets, typography, and reusable UI components like buttons, inputs, and tables.
+ */
+
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
+/* 
+ * CSS Variables (Design Tokens)
+ * Defines the core color palette, spacing, and border radii for the entire app.
+ */
 :root {
-  --primary: #6366f1;
+  /* Brand Colors */
+  --primary: #6366f1; /* Indigo */
   --primary-hover: #4f46e5;
-  --secondary: #ec4899;
-  --background: #0f172a;
-  --surface: #1e293b;
+  --secondary: #ec4899; /* Pink */
+  
+  /* Theme Colors */
+  --background: #0f172a; /* Slate 900 */
+  --surface: #1e293b; /* Slate 800 */
   --surface-hover: #334155;
+  
+  /* Text Colors */
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
+  
+  /* Semantic Colors (Status) */
   --success: #10b981;
   --danger: #ef4444;
   --warning: #f59e0b;
+  
+  /* Border Radius */
   --radius-lg: 16px;
   --radius-md: 12px;
   --radius-sm: 8px;
   
+  /* Glassmorphism Variables */
   --glass-bg: rgba(30, 41, 59, 0.7);
   --glass-border: rgba(255, 255, 255, 0.1);
 }
 
+/* 
+ * Global Reset
+ * Ensures consistent padding and border-box sizing across all browsers.
+ */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+/* 
+ * Base Body Styles
+ * Applies the main font, background color, and a subtle glowing gradient effect.
+ */
 body {
   font-family: 'Outfit', sans-serif;
   background-color: var(--background);
   color: var(--text-main);
   min-height: 100vh;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  /* Background gradients for a modern dark theme look */
   background-image: 
     radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
   background-attachment: fixed;
 }
 
-/* Glassmorphism Classes */
+/* =========================================
+ * Glassmorphism Utility Classes
+ * ========================================= */
+
+/* Main glass panel effect used for large containers (like login/register) */
 .glass-panel {
   background: var(--glass-bg);
   backdrop-filter: blur(12px);
@@ -49,6 +81,7 @@ body {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
+/* Smaller glass card effect used for dashboard widgets and sections */
 .glass-card {
   background: rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(8px);
@@ -59,16 +92,19 @@ body {
 }
 
 .glass-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px); /* Slight lift on hover */
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Typography */
+/* =========================================
+ * Typography
+ * ========================================= */
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   line-height: 1.2;
 }
 
+/* Utility to apply a primary-to-secondary gradient to text */
 .gradient-text {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   -webkit-background-clip: text;
@@ -76,7 +112,9 @@ h1, h2, h3, h4, h5, h6 {
   background-clip: text;
 }
 
-/* Buttons */
+/* =========================================
+ * Button Components
+ * ========================================= */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -93,6 +131,7 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
 }
 
+/* Primary call-to-action button */
 .btn-primary {
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
@@ -113,6 +152,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: none;
 }
 
+/* Secondary/Outline button */
 .btn-outline {
   background: transparent;
   color: var(--text-main);
@@ -124,6 +164,7 @@ h1, h2, h3, h4, h5, h6 {
   border-color: rgba(255, 255, 255, 0.2);
 }
 
+/* Danger action button */
 .btn-danger {
   background: rgba(239, 68, 68, 0.1);
   color: var(--danger);
@@ -134,7 +175,9 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(239, 68, 68, 0.2);
 }
 
-/* Forms */
+/* =========================================
+ * Form Inputs
+ * ========================================= */
 .form-group {
   margin-bottom: 1.25rem;
 }
@@ -165,7 +208,9 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
-/* Layouts */
+/* =========================================
+ * Layout Structure
+ * ========================================= */
 .app-container {
   display: flex;
   min-height: 100vh;
@@ -193,7 +238,9 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 1.1rem;
 }
 
-/* Utilities */
+/* =========================================
+ * Utility Classes (Spacing & Alignment)
+ * ========================================= */
 .text-center { text-align: center; }
 .mt-1 { margin-top: 0.25rem; }
 .mt-2 { margin-top: 0.5rem; }
@@ -203,7 +250,9 @@ h1, h2, h3, h4, h5, h6 {
 .mb-4 { margin-bottom: 1rem; }
 .mb-6 { margin-bottom: 1.5rem; }
 
-/* Alerts / Messages */
+/* =========================================
+ * Alerts and Feedback Messages
+ * ========================================= */
 .alert {
   padding: 1rem;
   border-radius: var(--radius-sm);
@@ -232,7 +281,9 @@ h1, h2, h3, h4, h5, h6 {
   color: #a5b4fc;
 }
 
-/* Animations */
+/* =========================================
+ * Keyframe Animations
+ * ========================================= */
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -244,11 +295,14 @@ h1, h2, h3, h4, h5, h6 {
   100% { opacity: 1; }
 }
 
+/* Utility class for pulsing elements */
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Webcam Container */
+/* =========================================
+ * Webcam & Face Recognition UI Styles
+ * ========================================= */
 .webcam-container {
   position: relative;
   width: 100%;
@@ -266,7 +320,7 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scaleX(-1); /* Mirror for natural feel */
+  transform: scaleX(-1); /* Mirror the video feed for a natural user experience */
 }
 
 .webcam-overlay {
@@ -277,6 +331,7 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 
+/* Animated scanning line effect used during face processing */
 .scanning-line {
   position: absolute;
   top: 0;
@@ -295,10 +350,12 @@ h1, h2, h3, h4, h5, h6 {
   100% { top: 0; }
 }
 
-/* Tables */
+/* =========================================
+ * Data Tables
+ * ========================================= */
 .table-container {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: auto; /* Allow horizontal scrolling on small screens */
   border-radius: var(--radius-md);
   border: 1px solid var(--glass-border);
 }
@@ -324,13 +381,14 @@ th {
 }
 
 tr:last-child td {
-  border-bottom: none;
+  border-bottom: none; /* Remove bottom border from the last row */
 }
 
 tr:hover td {
   background: rgba(255, 255, 255, 0.02);
 }
 
+/* Status indicator badges inside tables */
 .status-badge {
   display: inline-flex;
   padding: 0.25rem 0.75rem;
@@ -351,7 +409,9 @@ tr:hover td {
   border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-/* Responsive */
+/* =========================================
+ * Global Responsive Adjustments
+ * ========================================= */
 @media (max-width: 768px) {
   .app-container {
     flex-direction: column;
@@ -366,7 +426,9 @@ tr:hover td {
   }
 }
 
-/* Syllabus Specific Styles */
+/* =========================================
+ * Specific Page Styles: Syllabus
+ * ========================================= */
 .syllabus-subject-header {
   display: flex;
   justify-content: space-between;
@@ -419,7 +481,9 @@ tr:hover td {
   line-height: 1.5;
 }
 
-/* Payment Form Styles */
+/* =========================================
+ * Specific Page Styles: Fee Payments
+ * ========================================= */
 .payment-form-container {
   background: rgba(99, 102, 241, 0.05);
   border: 1px solid rgba(99, 102, 241, 0.1);

@@ -1,15 +1,26 @@
-// src/pages/AcademicResults.jsx
+/**
+ * @file AcademicResults.jsx
+ * @description Displays the student's academic performance, including CGPA, credits,
+ * and a detailed breakdown of their latest semester grades.
+ */
+
 import React from 'react';
 import { getLoggedInUser } from '../utils/storageUtils';
 
+/**
+ * AcademicResults Component
+ * @returns {JSX.Element} The academic results view
+ */
 const AcademicResults = () => {
+  // Fetch current logged in user (could be used to fetch actual data from backend)
   const user = getLoggedInUser();
 
-  // Dummy academic data
+  // Dummy academic data for demonstration purposes
   const cgpa = "8.75";
   const completedCredits = 96;
   const currentSemester = "Semester 6";
 
+  // List of courses and their respective grades for the current semester
   const currentResults = [
     { code: "CS301", subject: "Database Management Systems", credits: 4, grade: "A+" },
     { code: "CS302", subject: "Operating Systems", credits: 4, grade: "A" },
@@ -27,6 +38,7 @@ const AcademicResults = () => {
         <p className="page-subtitle">Your academic performance and grades</p>
       </div>
 
+      {/* Summary Statistics Cards */}
       <div className="dashboard-grid mb-6">
         <div className="glass-card stat-card">
           <div className="stat-label">Overall CGPA</div>
@@ -42,6 +54,7 @@ const AcademicResults = () => {
         </div>
       </div>
 
+      {/* Detailed Results Table */}
       <div className="glass-card">
         <div className="flex justify-between items-center mb-4" style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
           <h2 className="text-xl">Latest Semester Results ({currentSemester})</h2>
@@ -58,12 +71,14 @@ const AcademicResults = () => {
               </tr>
             </thead>
             <tbody>
+              {/* Map through the results array to render table rows */}
               {currentResults.map((record, index) => (
                 <tr key={index}>
                   <td>{record.code}</td>
                   <td>{record.subject}</td>
                   <td>{record.credits}</td>
                   <td>
+                    {/* Display grade in a styled badge */}
                     <span className={`status-badge status-present`}>
                       {record.grade}
                     </span>
